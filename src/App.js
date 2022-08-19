@@ -12,7 +12,7 @@ import axios from 'axios';
 
 
 function App() {
-  const CLIENT_ID = "+++++++++++++++++++++++++"
+  const CLIENT_ID = "9716c3dc36de44e79b3056b4012e4115"
 const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
@@ -22,19 +22,20 @@ const [token, setToken] = useState("")
 const [searchKey, setSearchKey] = useState("")
 const [artists, setArtists] = useState([])
 
+const [newAlbums, setNewAlbums] = useState([])
+
 useEffect(() => {
   const hash = window.location.hash
   let token = window.localStorage.getItem("token")
-
+  
   if (!token && hash) {
-      token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
-
-      window.location.hash = ""
-      window.localStorage.setItem("token", token)
+    token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+    
+    window.location.hash = ""
+    window.localStorage.setItem("token", token)
   }
-
+  
   setToken(token)
-
 }, [])
 
 const logout = () => {
@@ -68,6 +69,30 @@ const renderArtists = () => {
   ))
 }
 
+
+useEffect(() => {
+  async function newReleaseAlbum() {
+    const response = await axios.get("https://api.spotify.com/v1/browse/new-releases", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json" 
+      }
+    })
+    setNewAlbums(response.data.albums.items);
+  }
+  newReleaseAlbum() 
+},[token])
+
+
+  // return newAlbums.map(album => (
+  //   <div key={album.id}>
+  //     {album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}
+  //     {album.name}
+  //   </div>
+  // ))
+
+// }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -85,7 +110,19 @@ const renderArtists = () => {
       }
 
     {renderArtists()}
-      </header>
+    </header>
+    <main>
+      {token ?
+        (<div>
+          {newAlbums.map(album => (
+            <div key={album.id}>
+              {album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}
+              {album.name}
+            </div>
+          ))}
+        </div>)
+      :(<></>)}
+    </main>
     </div>
   );
 }
