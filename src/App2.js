@@ -152,7 +152,7 @@ const PopularandRanking = styled.div`
   margin: 15px 0;
 `
 
-function App() {
+function App2() {
 const CLIENT_ID = "23bdd6549ab046a989e1c473266f1264"
 const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
@@ -333,4 +333,4 @@ const rollingBar = () => {
   );
 }
 
-export default App;
+export default App2;
