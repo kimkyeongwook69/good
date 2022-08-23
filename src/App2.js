@@ -12,7 +12,6 @@ import PopularAlbums from './component/PopularAlbums';
 import RankingAlbums from './component/RankingAlbums';
 import Footer from './component/Footer';
 
-// npm install axios
 
 const Container = styled.div`
   padding: 3rem 5rem;
@@ -153,16 +152,8 @@ const PopularandRanking = styled.div`
   margin: 15px 0;
 `
 
-
-const PopularandRanking = styled.div`
-  display: flex;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin: 15px 0;
-`
-
-function App() {
-  const CLIENT_ID = "9716c3dc36de44e79b3056b4012e4115"
+function App2() {
+const CLIENT_ID = "23bdd6549ab046a989e1c473266f1264"
 const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
@@ -193,6 +184,8 @@ useEffect(() => {
   }
   
   setToken(token)
+
+  console.log("ttetst");
 }, [])
 
 const logout = () => {
@@ -340,4 +333,4 @@ const rollingBar = () => {
   );
 }
 
-export default App;
+export default App2;
