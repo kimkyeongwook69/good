@@ -5,14 +5,20 @@ import styled from "styled-components";
 import {CLIENT_ID, REDIRECT_URI, AUTH_ENDPOINT, RESPONSE_TYPE} from './config'
 import Search from './component/Search';
 import TopArtist from './component/TopArtists';
-import NewReleaseAlbum from './component/NewReleaseAlbum';
 import Test from './component/Test';
 import NewAlbums from './component/NewAlbums';
 import PopularAlbums from './component/PopularAlbums';
 import RankingAlbums from './component/RankingAlbums';
 import Footer from './component/Footer';
 
+// npm install
 // npm install axios
+// npm styled-components
+
+// spotify API Reference
+// https://developer.spotify.com/documentation/web-api/reference/#/
+// How to use the Spotify API In Your React JS App
+// https://dev.to/dom_the_dev/how-to-use-the-spotify-api-in-your-react-js-app-50pn
 
 const Container = styled.div`
   padding: 3rem 5rem;
@@ -54,8 +60,6 @@ const SearchInput = styled.input`
   outline: none;
 `;
 
-
-
 const SearchButton = styled.button`
   position: absolute;
   background-color:transparent;
@@ -63,8 +67,6 @@ const SearchButton = styled.button`
   right: 0.5rem;
   cursor: pointer;
 `;
-
-
 
 const Ranking = styled.div`
   width: 23%;
@@ -97,9 +99,6 @@ const RankingItem = styled.li`
   }
 `;
 
-
-
-
 const LogoutButton = styled.button`
   padding: 10px 15px;
   border: 1px solid white;
@@ -109,8 +108,6 @@ const LogoutButton = styled.button`
   cursor: pointer;
 `;
 
-
-
 const MenuItem = styled.li`
   width: 12.5%;
   border-bottom: 1px solid lightgray;
@@ -119,7 +116,6 @@ const MenuItem = styled.li`
   text-align: center;
   font-size: 0.8rem;
 `;
-
 
 const SearchArea = styled.div`
   margin: 15px 0;
@@ -145,137 +141,98 @@ const SearchItem = styled.div`
   padding: 20px;
 `;
 
-
 const PopularandRanking = styled.div`
   display: flex;
   font-size: 0.8rem;
   font-weight: bold;
   margin: 15px 0;
-`
-
-
-const PopularandRanking = styled.div`
-  display: flex;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin: 15px 0;
-`
+`;
 
 function App() {
-  const CLIENT_ID = "9716c3dc36de44e79b3056b4012e4115"
-const REDIRECT_URI = "http://localhost:3000"
-const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
-const RESPONSE_TYPE = "token"
+  const [token, setToken] = useState("")
 
-const [token, setToken] = useState("")
+  const [searchKey, setSearchKey] = useState("")
+  const [artists, setArtists] = useState([])
 
-const [searchKey, setSearchKey] = useState("")
-const [artists, setArtists] = useState([])
+  const searchArea = useRef();
+  const searchContent = useRef();
 
-const [newAlbums, setNewAlbums] = useState([])
+  const rankingItemsRef = useRef([]);
+  const rankingItemsCount = useRef(1);
 
-const searchArea = useRef();
-const searchContent = useRef();
-
-
-const rankingItemsRef = useRef([]);
-const rankingItemsCount = useRef(1);
-
-useEffect(() => {
-  const hash = window.location.hash
-  let token = window.localStorage.getItem("token")
-  
-  if (!token && hash) {
-    token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+  useEffect(() => {
+    const hash = window.location.hash
+    let token = window.localStorage.getItem("token")
     
-    window.location.hash = ""
-    window.localStorage.setItem("token", token)
+    if (!token && hash) {
+      token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+      
+      window.location.hash = ""
+      window.localStorage.setItem("token", token)
+    }
+    
+    setToken(token)
+  }, [])
+
+  const logout = () => {
+    setToken("")
+    window.localStorage.removeItem("token")
   }
-  
-  setToken(token)
-}, [])
 
-const logout = () => {
-  setToken("")
-  window.localStorage.removeItem("token")
-}
-
-const searchArtists = async (e) => {
-  e.preventDefault();
-  searchArea.current.classList.add("on");
-  searchContent.current.innerText = `'${searchKey}'에 대한 검색 결과 입니다.`;
-  const {data} = await axios.get("https://api.spotify.com/v1/search", {
-      headers: {
-          Authorization: `Bearer ${token}`
-      },
-      params: {
-          q: searchKey,
-          type: "artist"
-      }
-  })
-
-  setArtists(data.artists.items);
-}
-
-const renderArtists = () => {
-  return artists.map(artist => (
-      <SearchItem key={artist.id}>
-          {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>}
-          <p>{artist.name}</p>
-      </SearchItem>
-  ))
-}
-
-
-useEffect(() => {
-  async function newReleaseAlbum() {
-    const response = await axios.get("https://api.spotify.com/v1/browse/new-releases", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      }
+  const searchArtists = async (e) => {
+    e.preventDefault();
+    searchArea.current.classList.add("on");
+    searchContent.current.innerText = `'${searchKey}'에 대한 검색 결과 입니다.`;
+    const {data} = await axios.get("https://api.spotify.com/v1/search", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: {
+            q: searchKey,
+            type: "artist"
+        }
     })
-    setNewAlbums(response.data.albums.items);
-  }
-  newReleaseAlbum() 
-},[token])
 
-
-
-
-
-useEffect(() => {
-  const rolling = setInterval(() => {rollingBar();}, 4000);
-},[]);
-
-const rollingBar = () => {
-  if(rankingItemsCount.current > 1){
-    rankingItemsRef.current[(rankingItemsCount.current) - 2].classList.toggle("selected-after");
-  }else if(rankingItemsCount.current == 1){
-    rankingItemsRef.current[4].classList.remove("selected-after");
+    setArtists(data.artists.items);
   }
 
-  if(rankingItemsCount.current != 0){
-    rankingItemsRef.current[(rankingItemsCount.current) - 1].classList.toggle("selected");
-    rankingItemsRef.current[(rankingItemsCount.current) - 1].classList.toggle("selected-after");
-
-    rankingItemsRef.current[rankingItemsCount.current].classList.toggle("selected");
-  }else{
-    rankingItemsRef.current[rankingItemsCount.current].classList.toggle("selected");
-    rankingItemsRef.current[3].classList.toggle("selected-after");
-    rankingItemsRef.current[4].classList.toggle("selected");
-    rankingItemsRef.current[4].classList.toggle("selected-after");
+  const renderArtists = () => {
+    return artists.map(artist => (
+        <SearchItem key={artist.id}>
+            {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>}
+            <p>{artist.name}</p>
+        </SearchItem>
+    ))
   }
 
-  rankingItemsCount.current += 1;
-  if(rankingItemsCount.current == 5){
-    rankingItemsCount.current = 0;
+  useEffect(() => {
+    const rolling = setInterval(() => {rollingBar();}, 4000);
+  },[]);
+
+  const rollingBar = () => {
+    if(rankingItemsCount.current > 1){
+      rankingItemsRef.current[(rankingItemsCount.current) - 2].classList.toggle("selected-after");
+    }else if(rankingItemsCount.current == 1){
+      rankingItemsRef.current[4].classList.remove("selected-after");
+    }
+
+    if(rankingItemsCount.current != 0){
+      rankingItemsRef.current[(rankingItemsCount.current) - 1].classList.toggle("selected");
+      rankingItemsRef.current[(rankingItemsCount.current) - 1].classList.toggle("selected-after");
+
+      rankingItemsRef.current[rankingItemsCount.current].classList.toggle("selected");
+    }else{
+      rankingItemsRef.current[rankingItemsCount.current].classList.toggle("selected");
+      rankingItemsRef.current[3].classList.toggle("selected-after");
+      rankingItemsRef.current[4].classList.toggle("selected");
+      rankingItemsRef.current[4].classList.toggle("selected-after");
+    }
+
+    rankingItemsCount.current += 1;
+    if(rankingItemsCount.current == 5){
+      rankingItemsCount.current = 0;
+    }
   }
-}
-
-
-
-
 
   return (
     <Container>
