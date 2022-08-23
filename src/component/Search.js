@@ -24,8 +24,21 @@ const SearchArea = styled.div`
 const SearchItem = styled.div`
   width: 25%;
   padding: 20px;
+  align-items: center;
 `;
 
+const SortMenu = styled.div`
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  & button{
+    border: none;
+    padding: 5px 10px;
+    background-color: lightgray;
+    color: white;
+    cursor: pointer;
+  }
+`
 function Search ({token, keyValue}) {
     const [artists, setArtists] = useState([])
 
@@ -44,20 +57,29 @@ function Search ({token, keyValue}) {
     
         setArtists(data.artists.items)
     
-        console.log(data)
+        console.log(data.artists.items);
     }
     
     const renderArtists = () => {
       return artists.map(artist => (
           <SearchItem key={artist.id}>
-              {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>}
+              {artist.images.length ? <a href={artist.external_urls.spotify} target="_blank"><img width={"100%"} src={artist.images[0].url} alt=""/></a> : <a href={artist.external_urls.spotify} target="_blank"><img width={"100%"} src="img/no_image.png"/></a>}
               {artist.name}
           </SearchItem>
       ))
     }
+
+    const sortPopularity = () => {
+      setArtists([...(artists.sort((a,b) => b.popularity - a.popularity))]); 
+    }
+
+
     return(
         <SearchArea>
             <h1>'{keyValue}' 에 대한 검색 결과 입니다.</h1>
+            <SortMenu>
+              <button onClick={sortPopularity}>인기순</button>
+            </SortMenu>
             {renderArtists()}
         </SearchArea>
     )

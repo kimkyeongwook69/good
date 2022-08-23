@@ -281,11 +281,11 @@ const searchRelatedArtists = (id) => {
 
         <Ranking>
           <ul>
-            <RankingItem className='selected' ref={elem => (rankingItemsRef.current[0] = elem)}><span>1. keyword1</span></RankingItem>
-            <RankingItem ref={elem => (rankingItemsRef.current[1] = elem)}><span>2. keyword2</span></RankingItem>
-            <RankingItem ref={elem => (rankingItemsRef.current[2] = elem)}><span>3. keyword3</span></RankingItem>
-            <RankingItem ref={elem => (rankingItemsRef.current[3] = elem)}><span>4. keyword4</span></RankingItem>
-            <RankingItem ref={elem => (rankingItemsRef.current[4] = elem)}><span>5. keyword5</span></RankingItem>
+            <RankingItem className='selected' ref={elem => (rankingItemsRef.current[0] = elem)}><span>1. 0TnOYISbd1XYRBk9myaseg</span></RankingItem>
+            <RankingItem ref={elem => (rankingItemsRef.current[1] = elem)}><span>2. 6yTYR09WCvsgdnurDW4WQo</span></RankingItem>
+            <RankingItem ref={elem => (rankingItemsRef.current[2] = elem)}><span>3. 5nkYRuiIHg2xXHFC8bfosJ</span></RankingItem>
+            <RankingItem ref={elem => (rankingItemsRef.current[3] = elem)}><span>4. 0N0d3kjwdY2h7UVuTdJGfp</span></RankingItem>
+            <RankingItem ref={elem => (rankingItemsRef.current[4] = elem)}><span>5. 7MlcYSTwlLeOtBMDJ6WOv5</span></RankingItem>
           </ul>
           
         </Ranking>
