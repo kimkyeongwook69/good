@@ -6,11 +6,11 @@ import {CLIENT_ID, REDIRECT_URI, AUTH_ENDPOINT, RESPONSE_TYPE} from './config'
 import Search from './component/Search';
 import TopArtist from './component/TopArtists';
 import NewReleaseAlbum from './component/NewReleaseAlbum';
-import Test from './component/Test';
 import NewAlbums from './component/NewAlbums';
 import PopularAlbums from './component/PopularAlbums';
 import RankingAlbums from './component/RankingAlbums';
 import Footer from './component/Footer';
+import SearchRelatedArtists from './component/SearchRelatedArtists';
 
 
 const Container = styled.div`
@@ -45,9 +45,20 @@ const SearchForm = styled.div`
   position: relative;
 `;
 
+const SearchSelect = styled.select`
+  position: absolute;
+  border: none;
+  background-color:transparent;
+  padding: 8px 5px;
+  padding-left: 15px;
+  left: 12px;
+  outline: none;
+`
+
 const SearchInput = styled.input`
   border: 2px solid skyblue;
   padding: 0.5rem 2rem;
+  padding-left: calc(135px + 0.8rem);
   border-radius: 30px;
   width: 100%;
   outline: none;
@@ -120,29 +131,9 @@ const MenuItem = styled.li`
 `;
 
 
-const SearchArea = styled.div`
-  margin: 15px 0;
-  padding: 1rem 3rem;
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  text-align: center;
-  font-size: 0.8rem;
-  font-weight: bold;
-  &.on{
-    display: flex;
-  }
 
-  & h1{
-    width: 100%;
-    padding: 30px 0;
-  }
-`;
 
-const SearchItem = styled.div`
-  width: 25%;
-  padding: 20px;
-`;
+
 
 
 const PopularandRanking = styled.div`
@@ -165,9 +156,14 @@ const [artists, setArtists] = useState([])
 
 const [newAlbums, setNewAlbums] = useState([])
 
+const [searchOption, setSearchOption] = useState(0);
+
+const [artistKey,SetArtistKey] = useState("");
+
 const searchArea = useRef();
 const searchContent = useRef();
-
+const searchRef = useRef("");
+const searchSelectRef = useRef("");
 
 const rankingItemsRef = useRef([]);
 const rankingItemsCount = useRef(1);
@@ -195,29 +191,20 @@ const logout = () => {
 
 const searchArtists = async (e) => {
   e.preventDefault();
-  searchArea.current.classList.add("on");
-  searchContent.current.innerText = `'${searchKey}'에 대한 검색 결과 입니다.`;
-  const {data} = await axios.get("https://api.spotify.com/v1/search", {
-      headers: {
-          Authorization: `Bearer ${token}`
-      },
-      params: {
-          q: searchKey,
-          type: "artist"
-      }
-  })
-
-  setArtists(data.artists.items);
+  switch(searchSelectRef.current.value){
+    case "search":
+      setSearchKey(searchRef.current.value);
+      setSearchOption(1);
+      break;
+    case "relatedArtists":
+      SetArtistKey(searchRef.current.value);
+      setSearchOption(2);
+      break;
+    default:
+        break;
+  }
 }
 
-const renderArtists = () => {
-  return artists.map(artist => (
-      <SearchItem key={artist.id}>
-          {artist.images.length ? <img width={"100%"} src={artist.images[0].url} alt=""/> : <div>No Image</div>}
-          <p>{artist.name}</p>
-      </SearchItem>
-  ))
-}
 
 
 useEffect(() => {
@@ -266,7 +253,10 @@ const rollingBar = () => {
   }
 }
 
-
+const searchRelatedArtists = (id) => {
+  searchRef.current.value = id;
+  SetArtistKey(id);
+}
 
 
 
@@ -278,7 +268,11 @@ const rollingBar = () => {
           {token ?
           <SearchForm>
             <form onSubmit={searchArtists}>
-                <SearchInput type="text" onChange={e => setSearchKey(e.target.value)}/>
+                <SearchSelect ref={searchSelectRef}>
+                  <option value="search" selected>search</option>
+                  <option value="relatedArtists" >relatedArtists</option>
+                </SearchSelect>
+                <SearchInput type="text" ref={searchRef}/>
                 <SearchButton type={"submit"}><img src="img/search.png" width="32px"/></SearchButton>
             </form>
           </SearchForm>
@@ -314,11 +308,9 @@ const rollingBar = () => {
         </nav>
     </header>
     <main>
-      <SearchArea ref={searchArea}>
-        <h1 ref={searchContent}></h1>
-        {renderArtists()}
-      </SearchArea>
-
+       {searchOption == 1 ? <Search token={token} keyValue={searchKey}/> : <></>}
+       {searchOption == 2 ? <SearchRelatedArtists token={token} keyValue={artistKey} searchRelatedArtists={searchRelatedArtists}/> : <></>}
+      
       <NewAlbums token={token}/>
 
       <PopularandRanking>
@@ -329,6 +321,8 @@ const rollingBar = () => {
     <footer>
       <Footer/>
     </footer>
+    
+    
     </Container>
   );
 }
