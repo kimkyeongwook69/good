@@ -1,5 +1,5 @@
 import '../App.css';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import axios from 'axios';
 import styled from "styled-components";
 
@@ -7,7 +7,7 @@ const PopularAlbumsWrap = styled.div`
   width: calc(100% - 300px);
   padding: 15px;
   padding-top: 0px;
-`
+`;
 
 const PopularAlbumList = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ const PopularAlbumList = styled.div`
   flex-wrap: wrap;
   border-top: 1px solid lightgray;
   margin-top: 12px;
-`
+`;
 
 const PopularAlbum = styled.div`
   width: 32.5%;
@@ -24,7 +24,8 @@ const PopularAlbum = styled.div`
   & img{
     margin-bottom: 10px;
   }
-`
+`;
+
 function PopularAlbums({token}){
     const [newAlbums, setNewAlbums] = useState([]);
 

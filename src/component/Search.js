@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
+import { searchArtists } from "../api/fetchApi";
 
 const SearchArea = styled.div`
   margin: 15px 0;
@@ -39,10 +41,14 @@ const SortMenu = styled.div`
     cursor: pointer;
   }
 `
-function Search ({token, keyValue}) {
-    const [artists, setArtists] = useState([])
+function Search ({token}) {
+    const data = useLocation();
+    const keyValue = data.state.value;
+    const [artists, setArtists] = useState([]);
 
-    useEffect(() => {if(keyValue != "" && {token}) {searchArtists();}}, [keyValue])
+    useEffect(() => {
+      if(keyValue != "" && {token}) {searchArtists();}
+    }, [keyValue]);
     
     const searchArtists = async () => {
         const {data} = await axios.get("https://api.spotify.com/v1/search", {
@@ -53,12 +59,11 @@ function Search ({token, keyValue}) {
                 q: keyValue,
                 type: "artist"
             }
-        })
+        });
+        setArtists(data.artists.items);
+    };
+
     
-        setArtists(data.artists.items)
-    
-        console.log(data.artists.items);
-    }
     
     const renderArtists = () => {
       return artists.map(artist => (
@@ -73,7 +78,6 @@ function Search ({token, keyValue}) {
       setArtists([...(artists.sort((a,b) => b.popularity - a.popularity))]); 
     }
 
-
     return(
         <SearchArea>
             <h1>'{keyValue}' 에 대한 검색 결과 입니다.</h1>
@@ -85,5 +89,4 @@ function Search ({token, keyValue}) {
     )
 }
 
-
-export default Search
+export default Search;
