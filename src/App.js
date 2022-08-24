@@ -11,6 +11,9 @@ import PopularAlbums from './component/PopularAlbums';
 import RankingAlbums from './component/RankingAlbums';
 import Footer from './component/Footer';
 import SearchRelatedArtists from './component/SearchRelatedArtists';
+import Concerts from './component/Concerts';
+import ConcertDetail from './component/ConcertDetail';
+import GeneConcerts from './component/GeneConcerts';
 
 
 const Container = styled.div`
@@ -21,7 +24,7 @@ const Container = styled.div`
 `;
 
 const Header1 = styled.div`
-  padding: 1rem;
+  padding: 2rem 1rem;
   display: flex;
   align-items: center;
   position: relative;
@@ -143,6 +146,11 @@ const PopularandRanking = styled.div`
   margin: 15px 0;
 `
 
+const ConcertArea = styled.div`
+  display: flex;
+  padding-bottom: 20px;
+  
+`
 function App() {
 const CLIENT_ID = "23bdd6549ab046a989e1c473266f1264"
 const REDIRECT_URI = "http://localhost:3000"
@@ -294,18 +302,7 @@ const searchRelatedArtists = (id) => {
                           to Spotify</a>
                       : <LogoutButton onClick={logout}>Logout</LogoutButton>}
         </Header1>
-        <nav>
-          <ul>
-            <MenuItem>1</MenuItem>
-            <MenuItem>2</MenuItem>
-            <MenuItem>3</MenuItem>
-            <MenuItem>4</MenuItem>
-            <MenuItem>5</MenuItem>
-            <MenuItem>6</MenuItem>
-            <MenuItem>7</MenuItem>
-            <MenuItem>8</MenuItem>
-          </ul>
-        </nav>
+        
     </header>
     <main>
        {searchOption == 1 ? <Search token={token} keyValue={searchKey}/> : <></>}
@@ -313,15 +310,30 @@ const searchRelatedArtists = (id) => {
       
       <NewAlbums token={token}/>
 
-      <PopularandRanking>
+      {/* <PopularandRanking>
         <PopularAlbums token={token}/>
         <RankingAlbums token={token}/>
-      </PopularandRanking>
+      </PopularandRanking> */}
+
+      <ConcertArea>
+        <Concerts/>
+        <GeneConcerts/>
+      </ConcertArea>
+
+
+      <ConcertDetail/>  
     </main>
     <footer>
       <Footer/>
     </footer>
     
+    
+    
+
+
+
+
+
     
     </Container>
   );

@@ -79,7 +79,6 @@ function NewAlbums({token}){
             }
           })
           setNewAlbums(response.data.albums.items);
-          console.log(response.data.albums.items);
         }
         newReleaseAlbum() 
       },[token])      
