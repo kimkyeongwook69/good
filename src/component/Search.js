@@ -62,8 +62,6 @@ function Search ({token}) {
         });
         setArtists(data.artists.items);
     };
-
-    
     
     const renderArtists = () => {
       return artists.map(artist => (
@@ -80,7 +78,7 @@ function Search ({token}) {
 
     return(
         <SearchArea>
-            <h1>'{keyValue}' 에 대한 검색 결과 입니다.</h1>
+            {/* <h1>'{keyValue}' 에 대한 검색 결과 입니다.</h1> */}
             <SortMenu>
               <button onClick={sortPopularity}>인기순</button>
             </SortMenu>
