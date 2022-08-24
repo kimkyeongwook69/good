@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CLIENT_ID, REDIRECT_URI, AUTH_ENDPOINT, RESPONSE_TYPE } from '../config'
@@ -21,6 +21,7 @@ const LogoName = styled.h1`
   min-width: 170px;
   font-family: 'Berkshire Swash', cursive;
   color: #005666;
+  cursor: pointer;
 `;
 
 const SearchForm = styled.form`
@@ -112,7 +113,6 @@ export function Header({ token, setToken }) {
           <SearchForm onSubmit={searchArtists}>
             <SearchSelect ref={searchSelectRef}>
               <option value="artist" selected>Artist</option>
-              {/* <option value="relatedArtists" >relatedArtists</option> */}
               <option value="album" >Album</option>
             </SearchSelect>
             <SearchInput type="text" ref={searchRef} />
@@ -129,12 +129,6 @@ export function Header({ token, setToken }) {
             to Spotify</a>
           : <LogoutButton onClick={logout}>Logout</LogoutButton>}
       </TopHeader>
-
-      <nav>
-        <ul>
-          {/* <MenuItem><TopAlbums token={token} searchId={albums} newRelease={newAlbums} check={check} /><a></a></MenuItem> */}
-        </ul>
-      </nav>
     </div>
   )
 }

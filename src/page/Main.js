@@ -1,23 +1,23 @@
 import styled from "styled-components";
+import Concerts from "../component/Concerts";
+import GenreConcerts from "../component/GenreConcerts";
 import NewAlbums from "../component/NewAlbums";
-import PopularAlbums from "../component/PopularAlbums";
-import RankingAlbums from "../component/RankingAlbums";
 
-const PopularandRanking = styled.div`
+const ConcertArea = styled.div`
   display: flex;
-  font-size: 0.8rem;
-  font-weight: bold;
-  margin: 15px 0;
-`;
+  padding-bottom: 20px;
+  
+`
 
 export function Main({ token }) {
     return (
         <main>
             <NewAlbums token={token} />
-            <PopularandRanking>
-                <PopularAlbums token={token} />
-                <RankingAlbums token={token} />
-            </PopularandRanking>
+            
+            <ConcertArea>
+                <Concerts/>
+                <GenreConcerts/>
+            </ConcertArea>
         </main>
     )
 }
