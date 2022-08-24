@@ -113,7 +113,6 @@ export function Header({ token, setToken }) {
           <SearchForm onSubmit={searchArtists}>
             <SearchSelect ref={searchSelectRef}>
               <option value="artist" selected>Artist</option>
-              {/* <option value="relatedArtists" >relatedArtists</option> */}
               <option value="album" >Album</option>
             </SearchSelect>
             <SearchInput type="text" ref={searchRef} />
@@ -130,12 +129,6 @@ export function Header({ token, setToken }) {
             to Spotify</a>
           : <LogoutButton onClick={logout}>Logout</LogoutButton>}
       </TopHeader>
-
-      <nav>
-        <ul>
-          {/* <MenuItem><TopAlbums token={token} searchId={albums} newRelease={newAlbums} check={check} /><a></a></MenuItem> */}
-        </ul>
-      </nav>
     </div>
   )
 }
