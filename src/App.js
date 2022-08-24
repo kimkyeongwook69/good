@@ -8,7 +8,8 @@ import { Main } from './page/Main';
 
 // npm install
 // npm install axios
-// npm styled-components
+// npm install styled-components
+// npm install react-router-dom
 
 // spotify API Reference
 // https://developer.spotify.com/documentation/web-api/reference/#/
