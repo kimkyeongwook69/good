@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Concerts from "../component/Concerts";
-import GeneConcerts from "../component/GeneConcerts";
+import GenreConcerts from "../component/GenreConcerts";
 import NewAlbums from "../component/NewAlbums";
 
 const ConcertArea = styled.div`
@@ -16,7 +16,7 @@ export function Main({ token }) {
             
             <ConcertArea>
                 <Concerts/>
-                <GeneConcerts/>
+                <GenreConcerts/>
             </ConcertArea>
         </main>
     )

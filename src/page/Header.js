@@ -21,6 +21,7 @@ const LogoName = styled.h1`
   min-width: 170px;
   font-family: 'Berkshire Swash', cursive;
   color: #005666;
+  cursor: pointer;
 `;
 
 const SearchForm = styled.form`
