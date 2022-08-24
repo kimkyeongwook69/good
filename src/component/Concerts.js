@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import XMLParser from 'react-xml-parser'
 import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 const ConcertWrap = styled.div`
     width: calc(100% - 360px);
@@ -38,6 +39,9 @@ const Concert = styled.div`
         display: inline-block;
         padding: 5px 0;
     }
+    a {
+      cursor: pointer;
+    }
 `
 
 function parseJson(dataSet) {
@@ -47,6 +51,7 @@ function parseJson(dataSet) {
   
   const Concerts = () => {
     const [data, setData] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const readShowList = async () => {
@@ -65,16 +70,22 @@ function parseJson(dataSet) {
           readShowList();    
     },[]);
 
+    const goDetail = (id) => {
+      navigate("/detail", {state : {id : id}});
+      // searchRef.current.value = "";
+    }
 
     return (
       <ConcertWrap>
         <h1>공연 목록</h1>
         <ConcertList>
-          {data.length != 0 &&
+          {data.length !== 0 &&
           (
               data.map((item) => (
                   <Concert>
-                      <img src={item.children[5].value}/>
+                        <a onClick={() => {goDetail(item.children[0].value)}}>
+                        <img src={item.children[5].value}/>
+                        </a>
                       <span>{item.children[1].value}</span>
                   </Concert>)
               )

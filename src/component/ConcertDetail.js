@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import XMLParser from 'react-xml-parser'
 import styled from 'styled-components';
+import { useLocation } from "react-router-dom";
 
 const ConcertDetailWrap = styled.div`
     padding: 15px;
@@ -73,8 +74,16 @@ const ConcertDetailStyurls = styled.div`
 
 const ConcertDetailStyurlsImages = styled.div`
     display:flex;
+    flex-wrap: wrap;
+    text-align: center;
     & div{
-        width: 50%;
+        width: 100%;
+    }
+
+    & p{
+        padding: 150px 0;
+        font-weight: bold;
+        font-size: 0.8rem;
     }
 `
 function parseJson(dataSet) {
@@ -84,12 +93,16 @@ function parseJson(dataSet) {
 
 function ConcertDetail(){
     const [data, setData] = useState([]);
-
+    const location = useLocation();
+    
     useEffect(() => {
+        
+        const id = location.state.id;
+        
         const readShowList = async () => {
             try {
               const response = await axios.get(
-                '/pblprfr/PF195500?service=5142c77db2284ca09ff559832f6858e2',
+                '/pblprfr/' + id +'?service=5142c77db2284ca09ff559832f6858e2',
               );
                const xmlData = response.data;
                const jsonData = parseJson(xmlData);
@@ -104,13 +117,12 @@ function ConcertDetail(){
           readShowList();    
     },[]);
 
-
     return (
         
       <ConcertDetailWrap>
         
         
-        {data.length != 0 &&
+        {data.length !== 0 &&
         (
         <div>
             <ConcertDetailContent>
@@ -121,7 +133,7 @@ function ConcertDetail(){
             <ConcertDetailInfo>
                 <ConcertDetail1>
                     <ConcertPoster>
-                        <img src={data[11].value} width={"100%"}/ >
+                        <img src={1 && data[11].value} width={"100%"}/>
                     </ConcertPoster>
 
 
@@ -149,11 +161,11 @@ function ConcertDetail(){
                     </dl>
                     <dl>
                         <dt>공연 제작진</dt>
-                        <dd>{data[6].value != "" ? data[6].value : "--"}</dd>
+                        <dd>{data[6].value !== "" ? data[6].value : "--"}</dd>
                     </dl>
                     <dl>
                         <dt>제작사</dt>
-                        <dd>{data[9].value != "" ? data[9].value : "--"}</dd>
+                        <dd>{data[9].value !== "" ? data[9].value : "--"}</dd>
                     </dl>
                     <dl>
                         <dt>가격</dt>
@@ -166,7 +178,7 @@ function ConcertDetail(){
 
 
                     <h2>공연 시간 안내</h2>
-                    <p>{data[18].value}</p>
+                    <p>{ data.length=== 19 ? data[18].value : data[17].value}</p>
                     <p>공연 상태 : {data[14].value}</p>
 
                     <br/>
@@ -174,18 +186,23 @@ function ConcertDetail(){
                     <br/>
 
                     <h2>줄거리</h2>
-                    <p>{data[12].value != "" ? data[12].value : "줄거리가 존재하지 않습니다."}</p>
+                    <p>{data[12].value !== "" ? data[12].value : "줄거리가 존재하지 않습니다."}</p>
                 </ConcertDetail2>
             </ConcertDetailInfo>
             <ConcertDetailStyurls>
                 <h2>공연 설명 이미지</h2>
                 <ConcertDetailStyurlsImages>
-                    <div>
-                        <img src={data[16].children[0].value} width={"100%"}/>
-                    </div>
-                    <div>
-                        <img src={data[16].children[1].value} width={"100%"}/>
-                    </div>
+                    { data.length=== 19 ?
+                        data[16].children.map((img) => (
+                            <div>
+                                <img src={img.value} width={"80%"}/>
+                            </div>
+                        ))
+                        :
+                        <div>
+                            <p>현재 설명 이미지가 존재하지 않습니다.</p>
+                        </div>
+                    }
                 </ConcertDetailStyurlsImages>
                 
                 

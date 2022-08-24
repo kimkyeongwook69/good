@@ -83,7 +83,7 @@ function SearchRelatedArtists({token, keyValue, searchRelatedArtists}){
       
     return (
         <RelatedArtistsWrap>
-            <h1>Spotify id : '{keyValue}'와 관련된 아티스트 입니다.</h1>
+            {/* <h1>Spotify id : '{keyValue}'와 관련된 아티스트 입니다.</h1> */}
             {renderTopArtists()}
         </RelatedArtistsWrap>
     );

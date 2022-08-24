@@ -2,9 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import XMLParser from 'react-xml-parser'
 import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
 
 const GeneConcertsWrap = styled.div`
     width: 360px;
+    cursor: pointer;
     & h1{
         font-size: 0.8rem;
         font-weight: bold;
@@ -75,12 +77,13 @@ function GeneConcerts(){
     const [data, setData] = useState([]);
     const [gene, setGene] = useState(0);
     const geneLiRef = useRef([]);
+    const navigate = useNavigate();
 
     const readShowList = async (geneCode) => {
         try {
             let url = '/pblprfr?service=5142c77db2284ca09ff559832f6858e2&stdate=20220703&eddate=20220801&cpage=1&rows=10';
 
-            if(geneCode != undefined){
+            if(geneCode !== undefined){
                 url += "&shcate=" + geneCode;
             }else{
                 url += "&shcate=AAAB";
@@ -128,6 +131,11 @@ function GeneConcerts(){
         
     }
 
+    const goDetail = (id) => {
+        navigate("/detail", {state : {id : id}});
+        // searchRef.current.value = "";
+      }
+
     return(
         <GeneConcertsWrap>
             <h1>장르별 공연 목록</h1>
@@ -139,10 +147,10 @@ function GeneConcerts(){
                 </ul>
             </GeneList>
             <GeneConcertList>
-            {data.length != 0 &&
+            {data.length !== 0 &&
             (
                 data.map((item, index) => (
-                    <GeneConcert>
+                    <GeneConcert onClick={() => {goDetail(item.children[0].value)}}>
                         <div>
                             <span>{index + 1}</span>
                         </div>
